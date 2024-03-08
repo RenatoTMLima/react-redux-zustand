@@ -3,9 +3,10 @@ import { player as reducer, play, next } from "./player";
 
 const mockedState = {
   course: {
+    id: 1,
     modules: [
       {
-        id: "1",
+        id: 1,
         title: "Starting with React",
         lessons: [
           { id: "Jai8w6K_GnY", title: "CSS Modules", duration: "13:45" },
@@ -13,7 +14,7 @@ const mockedState = {
         ],
       },
       {
-        id: "2",
+        id: 2,
         title: "Application Structure",
         lessons: [
           {
@@ -28,6 +29,7 @@ const mockedState = {
   },
   currentModuleIndex: 0,
   currentLessonIndex: 0,
+  isLoading: true,
 };
 
 describe("player slice", () => {

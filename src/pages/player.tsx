@@ -2,17 +2,25 @@ import { MessageCircle } from "lucide-react";
 import { Header } from "../components/header";
 import { VideoPlayer } from "../components/video";
 import { Module } from "../components/module";
-import { useAppSelector } from "../store";
-import { useCurrentLesson } from "../store/slices/player";
 import { useEffect } from "react";
+import { useCurrentLesson, useStore } from "../zustand-store";
 
 export function Player() {
-  const modules = useAppSelector((store) => store.player.course.modules);
+  const { load, course } = useStore((store) => ({
+    load: store.load,
+    course: store.course,
+  }));
 
   const { currentLesson } = useCurrentLesson();
 
   useEffect(() => {
-    document.title = `Watching: ${currentLesson.title}`;
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (currentLesson?.title != null) {
+      document.title = `Watching: ${currentLesson.title}`;
+    }
   }, [currentLesson]);
 
   return (
@@ -34,14 +42,16 @@ export function Player() {
             <VideoPlayer />
           </div>
           <aside className="w-80 absolute top-0 right-0 bottom-0 divide-y-2 divide-zinc-900 border-l border-zinc-800 bg-zinc-900 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800">
-            {modules.map((mdl, index) => (
-              <Module
-                key={mdl.id}
-                title={mdl.title}
-                amountOfLessons={mdl.lessons.length}
-                moduleIndex={index}
-              />
-            ))}
+            {course?.modules != null
+              ? course.modules.map((mdl, index) => (
+                  <Module
+                    key={mdl.id}
+                    title={mdl.title}
+                    amountOfLessons={mdl.lessons.length}
+                    moduleIndex={index}
+                  />
+                ))
+              : null}
           </aside>
         </main>
       </div>
